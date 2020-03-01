@@ -5,10 +5,11 @@ import __main__
 
 class Ursina(ShowBase):
 
-    def __init__(self, init_showbase=False, base=None):
+    def __init__(self, init_showbase=False, base_=None):
         if (init_showbase):
             ShowBase.__init__(self)
         else:
+            base = base_
             print("Not initialising showbase...")
         application.base = base
         window.late_init()
