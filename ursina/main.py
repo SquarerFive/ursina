@@ -8,6 +8,8 @@ class Ursina(ShowBase):
     def __init__(self, init_showbase=False):
         if (init_showbase):
             ShowBase.__init__(self)
+        else:
+            print("Not initialising showbase...")
         application.base = base
         window.late_init()
 
