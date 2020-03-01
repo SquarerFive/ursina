@@ -5,8 +5,9 @@ import __main__
 
 class Ursina(ShowBase):
 
-    def __init__(self):
-        ShowBase.__init__(self)
+    def __init__(self, init_showbase=False):
+        if (init_showbase):
+            ShowBase.__init__(self)
         application.base = base
         window.late_init()
 
