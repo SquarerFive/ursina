@@ -5,7 +5,7 @@ import __main__
 
 class Ursina(ShowBase):
 
-    def __init__(self, init_showbase=False):
+    def __init__(self, init_showbase=False, base=None):
         if (init_showbase):
             ShowBase.__init__(self)
         else:
