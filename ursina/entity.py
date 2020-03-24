@@ -1,7 +1,6 @@
 import sys
 import inspect
 import importlib
-# import random
 import glob
 from pathlib import Path
 from panda3d.core import NodePath
@@ -41,7 +40,7 @@ class Entity(NodePath):
         super().__init__(self.__class__.__name__)
 
         self.name = camel_to_snake(self.type)
-        self.enabled = True
+        self.enabled = True     # disabled entities wil not be visible nor run code
         self.visible = True
         self.ignore = False     # if True, will not try to run code
         self.eternal = False    # eternal entities does not get destroyed on scene.clear()
@@ -53,20 +52,20 @@ class Entity(NodePath):
         if add_to_scene_entities:
             scene.entities.append(self)
 
-        self.model = None
+        self.model = None       # set model with model='model_name' (without file type extention)
         self.color = color.white
-        self.texture = None
+        self.texture = None     # set model with texture='texture_name'. requires a model to be set beforehand.
         self.reflection_map = scene.reflection_map
         self.reflectivity = 0
         self.render_queue = 0
         self.double_sided = False
         self.always_on_top = False
 
-        self.collision = False
-        self.collider = None
-        self.scripts = list()
+        self.collision = False  # toggle collision without changing collider.
+        self.collider = None    # set to 'box'/'sphere'/'mesh' for auto fitted collider.
+        self.scripts = list()   # add with add_script(class_instance). will assign an 'entity' variable to the script.
         self.animations = list()
-        self.hovered = False
+        self.hovered = False    # will return True if mouse hovers entity.
 
         self.origin = Vec3(0,0,0)
         self.position = Vec3(0,0,0) # can also set self.x, self.y, self.z
@@ -98,6 +97,8 @@ class Entity(NodePath):
 
         for key, value in kwargs.items():
             setattr(self, key, value)
+
+
     def _list_to_vec(self, value):
         if isinstance(value, (int, float, complex)):
             return Vec3(value, value, value)
@@ -187,7 +188,9 @@ class Entity(NodePath):
             if not isinstance(value, Vec4):
                 value = Vec4(value[0], value[1], value[2], value[3])
 
+
             if self.model:
+                self.model.setColorScaleOff() # prevent inheriting color from parent
                 self.model.setColorScale(value)
                 object.__setattr__(self, name, value)
 
@@ -729,24 +732,14 @@ class Entity(NodePath):
         self.setPos(relative_to, Vec3(value[0], value[2], value[1]))
 
 
-    def add_script(self, name, path=None):
-        # instance given
-        if isinstance(name, object) and type(name) is not str:
-            name.entity = self
-            name.enabled = True
-            setattr(self, camel_to_snake(name.__class__.__name__), name)
-            self.scripts.append(name)
+    def add_script(self, class_instance):
+        if isinstance(class_instance, object) and type(class_instance) is not str:
+            class_instance.entity = self
+            class_instance.enabled = True
+            setattr(self, camel_to_snake(class_instance.__class__.__name__), class_instance)
+            self.scripts.append(class_instance)
             # print('added script:', camel_to_snake(name.__class__.__name__))
-            return name
-
-
-    def remove_script(self, module_name):
-        for s in self.scripts:
-            if s.__module__ == module_name:
-                self.temp_script = s
-                self.scripts.remove(s)
-                self.__setattr__(module_name, None)
-                print('removed:', module_name)
+            return class_instance
 
 
     def combine(self, analyze=False, auto_destroy=True):
@@ -909,19 +902,19 @@ class Entity(NodePath):
 
 
     def shake(self, duration=.2, magnitude=1, speed=.05, direction=(1,1)):
+        import random
         s = Sequence()
-        self.original_position = self.position
+        original_position = self.position
         for i in range(int(duration / speed)):
-            s.append(self.posInterval(speed, Vec3(
-                self.x + (random.uniform(-.1, .1) * magnitude * direction[0]),
-                self.z,
-                self.y + (random.uniform(-.1, .1) * magnitude * direction[1]))
-            ))
-            s.append(self.posInterval(speed, Vec3(
-                self.original_position[0],
-                self.original_position[2],
-                self.original_position[1])
-            ))
+            s.append(Func(self.set_position,
+                Vec3(
+                    original_position[0] + (random.uniform(-.1, .1) * magnitude * direction[0]),
+                    original_position[1] + (random.uniform(-.1, .1) * magnitude * direction[1]),
+                    original_position[2],
+                )))
+            s.append(Wait(speed))
+            s.append(Func(self.set_position, original_position))
+
         s.start()
         return s
 
@@ -954,33 +947,33 @@ if __name__ == '__main__':
 
     e = Entity(model='quad', color=color.orange, position=(0,0,1), scale=1.5, rotation=(0,0,45))
 
-    '''example of inheriting Entity'''
-    class Player(Entity):
-        def __init__(self, **kwargs):
-            super().__init__()
-            self.model='cube'
-            self.color = color.red
-            self.scale_y = 2
-
-            for key, value in kwargs.items():
-                setattr(self, key, value)
-
-        # input and update functions gets automatically called by the engine
-        def input(self, key):
-            if key == 'space':
-                # self.color = self.color.inverse()
-                self.animate_x(2, duration=1)
-
-        def update(self):
-            self.x += held_keys['d'] * time.dt * 10
-            self.x -= held_keys['a'] * time.dt * 10
-
-    player = Player(x=-1)
-    EditorCamera()
+    # '''example of inheriting Entity'''
+    # class Player(Entity):
+    #     def __init__(self, **kwargs):
+    #         super().__init__()
+    #         self.model='cube'
+    #         self.color = color.red
+    #         self.scale_y = 2
+    #
+    #         for key, value in kwargs.items():
+    #             setattr(self, key, value)
+    #
+    #     # input and update functions gets automatically called by the engine
+    #     def input(self, key):
+    #         if key == 'space':
+    #             # self.color = self.color.inverse()
+    #             self.animate_x(2, duration=1)
+    #
+    #     def update(self):
+    #         self.x += held_keys['d'] * time.dt * 10
+    #         self.x -= held_keys['a'] * time.dt * 10
+    #
+    # player = Player(x=-1)
+    # EditorCamera()
 
 
     def input(key):
         if key == 'space':
-            e.animate('x', -3)
+            e.shake()
 
     app.run()
