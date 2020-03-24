@@ -5,12 +5,14 @@ import __main__
 
 class Ursina(ShowBase):
 
-    def __init__(self, init_showbase=False, base_=None):
+    def __init__(self, init_showbase=False, base_=None, disable_pause=False):
         if (init_showbase):
             ShowBase.__init__(self)
         
         application.base = base
         window.late_init()
+
+        self.disable_pause = disable_pause
 
         # camera
         camera._cam = base.camera
@@ -201,7 +203,7 @@ class Ursina(ShowBase):
         if key == 'f9':
             window.display_mode = 'default'
 
-        if key == 'escape':
+        if key == 'escape' and not self.disable_pause:
             if not application.paused:
                 application.pause()
             else:
