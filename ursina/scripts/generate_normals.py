@@ -14,7 +14,7 @@ def normalize_v3(arr):
     return arr
 
 
-def generate_normals(vertices, triangles=None, smooth=True):
+def generate_normals(vertices, triangles=None, smooth=True, inverse=False):
     import numpy
 
     if not triangles:
@@ -46,7 +46,10 @@ def generate_normals(vertices, triangles=None, smooth=True):
     normalize_v3(n)
 
     # inverse it, dunno why
-    n = [-e for e in n]
+    if (inverse):
+        n = [-e for e in n]
+    else:
+        n = n
 
     # now we have a normalized array of normals, one per triangle, i.e., per triangle normals.
     # But instead of one per triangle (i.e., flat shading), we add to each vertex in that triangle,

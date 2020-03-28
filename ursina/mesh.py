@@ -196,8 +196,8 @@ class Mesh(NodePath):
         self._triangles = value
 
 
-    def generate_normals(self, smooth=True):
-        self.normals = list(generate_normals(self.vertices, self.triangles, smooth))
+    def generate_normals(self, smooth=True, inverse=True):
+        self.normals = list(generate_normals(self.vertices, self.triangles, smooth, inverse))
         self.generate()
         return self.normals
 
@@ -235,7 +235,7 @@ class Mesh(NodePath):
 
 if __name__ == '__main__':
     from ursina import *
-    app = Ursina()
+    app = Ursina(init_showbase=True)
 
     verts = ((0,0,0), (1,0,0), (.5, 1, 0), (-.5,1,0))
     tris = (1, 2, 0, 2, 3, 0)
