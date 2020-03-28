@@ -9,9 +9,7 @@ class Ursina(ShowBase):
         
         if (init_showbase):
             ShowBase.__init__(self)
-        application.base = base
-        
-            
+            application.base = base
         window.late_init()
 
         self.disable_pause = disable_pause
