@@ -4,14 +4,14 @@ import __main__
 
 
 class Ursina(ShowBase):
-
+    
     def __init__(self, init_showbase=True, base_=None, disable_pause=False):
-        base = None
+        
         if (init_showbase):
             ShowBase.__init__(self)
-            application.base = base
-        else:
-            base = application.base
+        application.base = base
+        
+            
         window.late_init()
 
         self.disable_pause = disable_pause
