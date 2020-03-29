@@ -31,20 +31,21 @@ class Ursina(ShowBase):
             if drcam == base.cam:
                 print("region Camera equal to base.cam")
                 region = dr
-                
-        # camera
-        camera._cam = base.camera
-        camera._cam.reparent_to(camera)
-        camera.parent = base.render
-        camera.render = base.render
-        camera.position = (0, 0, -20)
-        scene.camera = camera
-        camera.reparent_to(base.render)
-        camera.set_up()
-        base.render.set_antialias(AntialiasAttrib.MMultisample)
-        window.make_exit_button()
-
-        camera.overlay = window.overlay
+        
+        if not (render_pipeline):
+            # camera
+            camera._cam = base.camera
+            camera._cam.reparent_to(camera)
+            camera.parent = base.render
+            camera.render = base.render
+            camera.position = (0, 0, -20)
+            scene.camera = camera
+            camera.reparent_to(base.render)
+            camera.set_up()
+            base.render.set_antialias(AntialiasAttrib.MMultisample)
+            window.make_exit_button()
+    
+            camera.overlay = window.overlay
 
         # input
         base.buttonThrowers[0].node().setButtonDownEvent('buttonDown')
