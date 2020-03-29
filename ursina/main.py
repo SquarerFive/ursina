@@ -7,10 +7,13 @@ class Ursina(ShowBase):
     
     def __init__(self, init_showbase=True, base_=None, disable_pause=False,
     render_pipeline = None):
-        if (render_pipeline):
+        if (render_pipeline and init_showbase):
             render_pipeline.pre_showbase_init()
+            ShowBase.__init__(self)
             render_pipeline.create(self)
-        if (init_showbase):
+            application.base = base
+
+        if (init_showbase and not render_pipeline):
             ShowBase.__init__(self)
             application.base = base
         
