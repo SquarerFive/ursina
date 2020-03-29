@@ -22,7 +22,7 @@ class Ursina(ShowBase):
             application.base = base
 
         window.late_init()
-
+        print(f"Current Camera: {base.cam}")
         self.disable_pause = disable_pause
 
         # camera
