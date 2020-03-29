@@ -23,8 +23,15 @@ class Ursina(ShowBase):
 
         window.late_init()
         print(f"Current Camera: {base.cam}")
-        self.disable_pause = disable_pause
 
+        self.disable_pause = disable_pause
+        for dr in base.win.getDisplayRegions():
+            drcam = dr.getCamera()
+            print(drcam)
+            if drcam == base.cam:
+                print("region Camera equal to base.cam")
+                region = dr
+                
         # camera
         camera._cam = base.camera
         camera._cam.reparent_to(camera)
