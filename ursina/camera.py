@@ -32,6 +32,13 @@ class Camera(Entity):
         self.display_region = base.camNode.get_display_region(0)
         print(f"Display region: {self.display_region}")
         print(f"regions: {base.win.getDisplayRegions()}")
+        for dr in base.win.getDisplayRegions():
+            drcam = dr.getCamera()
+            print(drcam)
+            if drcam == base.cam:
+                print("region Camera equal to base.cam")
+                region = dr
+
         win = self.display_region.get_window()
 
         self.perspective_lens = PerspectiveLens()
