@@ -43,10 +43,10 @@ class Ursina(ShowBase):
             camera.reparent_to(base.render)
             camera.set_up()
             base.render.set_antialias(AntialiasAttrib.MMultisample)
-            window.make_exit_button()
-    
-            camera.overlay = window.overlay
+            
 
+            camera.overlay = window.overlay
+        window.make_exit_button()
         # input
         base.buttonThrowers[0].node().setButtonDownEvent('buttonDown')
         base.buttonThrowers[0].node().setButtonUpEvent('buttonUp')
