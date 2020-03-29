@@ -28,16 +28,9 @@ class Camera(Entity):
         self.orthographic = False
 
 
-    def set_up(self):
+    def set_up(self, use_filters=True):
         self.display_region = base.camNode.get_display_region(0)
-        print(f"Display region: {self.display_region}")
-        print(f"regions: {base.win.getDisplayRegions()}")
-        for dr in base.win.getDisplayRegions():
-            drcam = dr.getCamera()
-            print(drcam)
-            if drcam == base.cam:
-                print("region Camera equal to base.cam")
-                region = dr
+        
 
         win = self.display_region.get_window()
 
@@ -82,8 +75,8 @@ class Camera(Entity):
 
         self.ui = Entity(eternal=True, name='ui', parent=self.ui_camera, scale=(self.ui_size*.5, self.ui_size*.5))
         scene.ui = self.ui
-
-        self.filter_manager = FilterManager(base.win, base.cam)
+        if (use_filters):
+            self.filter_manager = FilterManager(base.win, base.cam)
         self.render_texture = PandaTexture()
         self.filter_quad = None
 

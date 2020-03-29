@@ -32,7 +32,7 @@ class Ursina(ShowBase):
                 print("region Camera equal to base.cam")
                 region = dr
         
-        if not (render_pipeline):
+        if True:
             # camera
             camera._cam = base.camera
             camera._cam.reparent_to(camera)
@@ -41,7 +41,7 @@ class Ursina(ShowBase):
             camera.position = (0, 0, -20)
             scene.camera = camera
             camera.reparent_to(base.render)
-            camera.set_up()
+            camera.set_up(use_filters=(render_pipeline==None))
             base.render.set_antialias(AntialiasAttrib.MMultisample)
             
 
