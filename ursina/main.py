@@ -17,6 +17,10 @@ class Ursina(ShowBase):
             ShowBase.__init__(self)
             application.base = base
         
+        if (not init_showbase) and render_pipeline:
+            render_pipeline.create(self)
+            application.base = base
+
         window.late_init()
 
         self.disable_pause = disable_pause
