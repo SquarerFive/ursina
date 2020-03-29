@@ -30,6 +30,7 @@ class Camera(Entity):
 
     def set_up(self):
         self.display_region = base.camNode.get_display_region(0)
+        print(f"Display region: {self.display_region}")
         win = self.display_region.get_window()
 
         self.perspective_lens = PerspectiveLens()
