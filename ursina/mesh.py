@@ -52,7 +52,7 @@ class Mesh(NodePath):
         'line' : GeomLinestrips,
         'point' : GeomPoints,
         }
-
+    vdata=None
     def __init__(self, vertices=None, triangles=None, colors=None, uvs=None, normals=None, static=True, mode='triangle', thickness=1):
         super().__init__('mesh')
 
@@ -81,8 +81,9 @@ class Mesh(NodePath):
 
         static_mode = Geom.UHStatic if self.static else Geom.UHDynamic
         vertex_format = Mesh._formats[(bool(self.colors), bool(self.uvs), bool(self.normals))]
-        vdata = GeomVertexData('name', vertex_format, static_mode)
-        vdata.setNumRows(len(self.vertices)) # for speed
+        self.vdata = GeomVertexData('name', vertex_format, static_mode)
+        self.vdata.setNumRows(len(self.vertices)) # for speed
+        vdata = self.vdata
         self.geomNode = GeomNode('mesh')
         self.attachNewNode(self.geomNode)
 
