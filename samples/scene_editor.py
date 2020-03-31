@@ -477,7 +477,7 @@ class CreatePrefabButton(Button):
 
 if __name__ == '__main__':
     # window.vsync = False
-    app = Ursina(init_showbase=True)
+    app = Ursina()
     # create scene
     from ursina.prefabs.primitives import *
 
