@@ -50,7 +50,7 @@ class Camera(Entity):
         self.orthographic = False
         self.fov = 40
         self.clip_plane_near = 0.0001
-        self.clip_plane_far = 10000
+        self.clip_plane_far = 70000
 
         self.ui_display_region = win.make_display_region()
         self.ui_display_region.set_sort(20)
@@ -58,7 +58,7 @@ class Camera(Entity):
         self.ui_camera = NodePath(PandaCamera('ui_camera'))
         self.ui_lens = OrthographicLens()
         self.ui_lens.set_film_size(self.ui_size * .5 * self.aspect_ratio, self.ui_size * .5)
-        self.ui_lens.set_near_far(-1000, 1000)
+        self.ui_lens.set_near_far(-1000, 70000)
         self.ui_camera.node().set_lens(self.ui_lens)
         self._ui_lens_node = LensNode('_ui_lens_node', self.ui_lens)
 
