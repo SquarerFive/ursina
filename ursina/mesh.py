@@ -76,9 +76,11 @@ class Mesh(NodePath):
 
 
     def generate(self):  # call this after setting some of the variables to update it
+        print("Generating Mesh")
         if hasattr(self, 'geomNode'):
             self.geomNode.removeAllGeoms()
-
+        if (self.vdata):
+            self.vdata.clearRows()
         static_mode = Geom.UHStatic if self.static else Geom.UHDynamic
         vertex_format = Mesh._formats[(bool(self.colors), bool(self.uvs), bool(self.normals))]
         self.vdata = GeomVertexData('name', vertex_format, static_mode)
