@@ -76,7 +76,7 @@ class Mesh(NodePath):
 
 
     def generate(self):  # call this after setting some of the variables to update it
-        print("Generating Mesh")
+        #print("Generating Mesh")
         if hasattr(self, 'geomNode'):
             self.geomNode.removeAllGeoms()
         if (self.vdata):
